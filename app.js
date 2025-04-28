@@ -1,34 +1,32 @@
+// app.js
 const createError = require('http-errors');
 const express = require('express');
-const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
 const app = express();
- 
-app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.set('view engine', 'jade');
+// static fail from folder 'upLoads'
 
-app.use('api', require('./routes'));
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.use('/api', require('./routes')); // добавил / перед api
+
+// Обработка 404 ошибок
+app.use((req, res, next) => {
+  res.status(404).json({ message: 'Not Found' });
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+// Глобальная обработка всех ошибок
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).json({
+    message: err.message || 'Internal Server Error',
+    error: req.app.get('env') === 'development' ? err : {}
+  });
 });
 
 module.exports = app;
