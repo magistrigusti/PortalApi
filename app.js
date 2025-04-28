@@ -3,6 +3,7 @@ const createError = require('http-errors');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const fs = reqire('fs');
 
 const app = express();
 
@@ -12,9 +13,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.set('view engine', 'jade');
 // static fail from folder 'upLoads'
-
+app.use('/uploads', express.static('uploads'));
 
 app.use('/api', require('./routes')); // добавил / перед api
+
+if (!fs.existsSync('uploads')) {
+  fs.mkdirSync('uploads');
+}
 
 // Обработка 404 ошибок
 app.use((req, res, next) => {
