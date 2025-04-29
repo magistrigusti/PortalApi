@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const UserController = require('../controllers/user-controller'); // ✅ ПРАВИЛЬНО!
+const UserController = require('../controllers/user-controller'); 
 
 const uploadDestination = 'uploads';
 
@@ -17,8 +17,8 @@ const uploads = multer({ storage: storage });
 
 router.post('/register', UserController.register);
 router.post('/login', UserController.login);
-router.get('/current', UserController.currentUser); // 🔧 исправил: current → currentUser
-router.get('/user/:id', UserController.getUserById); // 🔧 исправил: login → getUserById
+router.get('/current', UserController.currentUser); 
+router.get('/user/:id', UserController.getUserById); 
 router.put('/users/:id', UserController.updateUser);
 
 module.exports = router;
