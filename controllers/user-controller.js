@@ -46,7 +46,22 @@ const UserController = {
     }
   },
   login: async (req, res) => {
-    res.send('login')
+    const { email, pasword } = req.body;
+
+    if (!email || !pasword) {
+      return res.status(400).json({error: 'All fields are required'});
+    }
+
+    try {
+      const user = await prisma.user.findUnique({ where: { email }});
+      if (!user) {
+        return res.status(400).json({ error: 'False login or password'})
+      }
+
+      const valid = await bcrupt.compare(password, user.password);
+    } catch (error) {
+
+    }
   },
   currentUser: async (req, res) => {
     res.send('current')
