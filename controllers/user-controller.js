@@ -58,9 +58,17 @@ const UserController = {
         return res.status(400).json({ error: 'False login or password'})
       }
 
-      const valid = await bcrupt.compare(password, user.password);
-    } catch (error) {
+      const valid = await bcrypt.compare(password, user.password);
+      if (!valid) {
+        return res.status(400).json({ error: "False login or password"});
+      }
 
+      const token = jwt.sign(({ userId: user.id }), process.env.SECRET_KEY);
+
+      res.json({ token })
+    } catch (error) {
+      console.log('Login error', error);
+      res.status(500).json({ error: 'Internal server error'});
     }
   },
   currentUser: async (req, res) => {
