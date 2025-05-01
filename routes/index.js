@@ -17,7 +17,7 @@ const uploads = multer({ storage: storage });
 
 router.post('/register', UserController.register);
 router.post('/login', UserController.login);
-router.get('/current', UserController.currentUser); 
+router.get('/current', authenticateToken, UserController.currentUser); 
 router.get('/user/:id', UserController.getUserById); 
 router.put('/users/:id', UserController.updateUser);
 
