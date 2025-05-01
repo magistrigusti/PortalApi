@@ -46,29 +46,34 @@ const UserController = {
     }
   },
   login: async (req, res) => {
-    const { email, pasword } = req.body;
+    const { email, password } = req.body;
 
-    if (!email || !pasword) {
-      return res.status(400).json({error: 'All fields are required'});
+    if (!email || !password) {
+      return res.status(400).json({ error: "Все поля обязательны" });
     }
 
     try {
-      const user = await prisma.user.findUnique({ where: { email }});
+      // Find the user
+      const user = await prisma.user.findUnique({ where: { email } });
+
       if (!user) {
-        return res.status(400).json({ error: 'False login or password'})
+        return res.status(400).json({ error: "Неверный логин или пароль" });
       }
 
+      // Check the password
       const valid = await bcrypt.compare(password, user.password);
+
       if (!valid) {
-        return res.status(400).json({ error: "False login or password"});
+        return res.status(400).json({ error: "Неверный логин или пароль" });
       }
 
-      const token = jwt.sign(({ userId: user.id }), process.env.SECRET_KEY);
+      // Generate a JWT
+      const token = jwt.sign({ userId: user.id }, process.env.SECRET_KEY);
 
-      res.json({ token })
+      res.json({ token });
     } catch (error) {
-      console.log('Login error', error);
-      res.status(500).json({ error: 'Internal server error'});
+      console.error("Error in login:", error);
+      res.status(500).json({ error: "Internal server error" });
     }
   },
   currentUser: async (req, res) => {

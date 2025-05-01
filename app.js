@@ -14,25 +14,32 @@ const app = express();
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.set('view engine', 'pug');
+// Раздавать статические файлы из папки 'uploads'
 app.use('/uploads', express.static('uploads'));
+
 app.use('/api', require('./routes'));
 
 if (!fs.existsSync("uploads")) {
   fs.mkdirSync("uploads");
 }
 
+// catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
+// error handler
 app.use(function(err, req, res, next) {
-  res.status(err.status || 500).json({
-    message: err.message || 'Internal Server Error',
-    error: req.app.get('env') === 'development' ? err : {}
-  });
-});
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
 
 module.exports = app;
