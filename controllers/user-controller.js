@@ -61,8 +61,10 @@ const UserController = {
       }
 
       // Check the password
+      console.log("Из запроса:", password);
+      console.log("Из базы:", user.password);
       const valid = await bcrypt.compare(password, user.password);
-
+      console.log("Пароль валиден?", valid);
       if (!valid) {
         return res.status(400).json({ error: "Неверный логин или пароль" });
       }
