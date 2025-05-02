@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const UserController = require('../controllers/user-controller');
+const PostController = require('../controllers/post-controller');
 const { authenticateToken } = require('../middleware/auth');
 
 const uploadDestination = 'uploads';
@@ -21,5 +22,10 @@ router.post('/login', UserController.login);
 router.get('/current', authenticateToken, UserController.current); 
 router.get('/user/:id', authenticateToken, UserController.getUserById);
 router.put('/user/:id', authenticateToken, UserController.updateUser);
+
+router.post('/posts', authenticateToken, PostController.createPost);
+router.get('/posts', authenticateToken, PostController.getAllPosts);
+router.get('/posts/:id', authenticateToken, PostController.getPostById);
+router.post('/posts/:id', authenticateToken, PostController.createPost);
 
 module.exports = router;
