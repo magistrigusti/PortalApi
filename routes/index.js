@@ -18,8 +18,8 @@ const uploads = multer({ storage: storage });
 
 router.post('/register', UserController.register);
 router.post('/login', UserController.login);
-router.get('/current', authenticateToken, UserController.current); // 💥 Вот тут был краш
-router.get('/user/:id', UserController.getUserById);
-router.put('/users/:id', UserController.updateUser);
+router.get('/current', authenticateToken, UserController.current); 
+router.get('/user/:id', authenticateToken, UserController.getUserById);
+router.put('/users/:id', authenticateToken, UserController.updateUser);
 
 module.exports = router;
