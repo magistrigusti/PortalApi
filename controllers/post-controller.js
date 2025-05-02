@@ -15,4 +15,4 @@ const PostController = {
   }
 }
 
-module.export = PostController;
+module.exports = PostController;
