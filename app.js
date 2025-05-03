@@ -16,7 +16,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.set('view engine', 'pug');
+
 // Раздавать статические файлы из папки 'uploads'
 app.use('/uploads', express.static('uploads'));
 
