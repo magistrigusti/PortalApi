@@ -35,5 +35,7 @@ router.delete('/comments/:id', authenticateToken, CommentController.deleteCommen
 
 router.post('/likes', authenticateToken, LikeController.likePost);
 router.delete('/likes/:id', authenticateToken, LikeController.unlikePost);
+router.get('/likes', authenticateToken, LikeController.getAllLikes);
+
 
 module.exports = router;

@@ -43,7 +43,7 @@ const LikeController = {
       });
 
       if (!existingLike) {
-        return res.status(400).json({ error: 'Лайк уже существует'});
+        return res.status(400).json({ error: 'Не лайкнутый пост нельзя дизлайкать'});
       }
 
       const like = await prisma.like.deleteMany({
