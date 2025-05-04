@@ -42,29 +42,31 @@ const FollowController = {
     }
   },
   unfollowUser: async (req, res) => {
+    const { followingId } = req.body;
     const userId = req.user.userId;
-    const { id: followingId } = req.params;
-
-    try{
-      const follow = await prisma.follows.findFirst({
+    
+    try {
+      const follows = await prisma.follows.findFirst({
         where: {
-          followerId: userId,
-          followingId,
-        },
+          AND: [
+            { followerId: userId },
+            { followingId }
+          ]
+        }
       });
 
-      if (!follow) {
-        return res.status(404).json({error: 'Подписка не найдена'});
+      if (!follows) {
+        return res.status(404).json({ error: 'Вы не подписаны на этого пользователя'});
       }
 
       await prisma.follows.delete({
-        where: {id: follow.id},
+        where: { id: follows.id }
       });
 
-      res.status(200).json({message: 'Вы отписались от пользователя'});
+      res.status(201).json({message: 'Вы отписались'});
     } catch (error) {
       console.error('Unfollow error', error);
-      return res.status(500).json({error: 'Internal server error'});
+      return res.status(500).json({ error: 'Internal server error'});
     }
   },
 };
