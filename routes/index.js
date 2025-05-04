@@ -2,9 +2,11 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const { 
-  UserController, PostController, CommentController, LikeController, FollowController 
-} = require('../controllers/user-controller');
+const UserController = require('../controllers/user-controller');
+const PostController = require('../controllers/post-controller');
+const CommentController = require('../controllers/comment-controller');
+const LikeController = require('../controllers/like-controller');
+const FollowController = require('../controllers/follow-controller');
 const { authenticateToken } = require('../middleware/auth');
 
 const uploadDestination = 'uploads';
